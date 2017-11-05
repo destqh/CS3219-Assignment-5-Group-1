@@ -9,39 +9,39 @@ Since data is more easily understood when it is visually presented, patterns whi
 	3. After installation, in the mongodb folder create 2 folders 'data' and 'log'.
 	4. In the data folder, create another folder 'db'.
 	5. Open cmd as administrator and navigate to the mongodb bin folder:
-	```
-	cd <Your directory>\mongodb\bin
-	```
+		```
+		cd <Your directory>\mongodb\bin
+		```
 	6. Run the command to set up the database:
-	```
-	mongod --directoryperdb --dbpath C:\Users\User\Documents\GitHub\Test\mongodb\data\db --logpath C:\Users\User\Documents\GitHub\Test\mongodb\log\mongo.log --logappend --rest --install
-	```
+		```
+		mongod --directoryperdb --dbpath C:\Users\User\Documents\GitHub\Test\mongodb\data\db --logpath C:\Users\User\Documents\GitHub\Test\mongodb\log\mongo.log --logappend --rest --install
+		```
 	7. Start MongoDB (make sure you run the cmd interface as administrator):
-	```
-	net start mongodb
-	```
+		```
+		net start mongodb
+		```
 	* Using the MongoDB shell in cmd:
-	```
-	mongo
-	```
+		```
+		mongo
+		```
 	* Stop MongoDB:
-	```
-	net stop mongodb
-	```
+		```
+		net stop mongodb
+		```
 	
 2. Set up Node.js
 	* Download and install [node.js](https://nodejs.org/en/) version 8.
 	* View version of node.js and npm:
-	```
-	node -v
-	npm -v
-	```
+		```
+		node -v
+		npm -v
+		```
 
 3. Clone Repo and in Repo folder run cmd line:
-```
-npm install express body-parser mongojs --save
-npm install chai chai-http mocha --save-dev
-```
+	```
+	npm install express body-parser mongojs --save
+	npm install chai chai-http mocha --save-dev
+	```
 
 4. Populate data to MongoDB
 	1. Make sure to start MongoDB.
