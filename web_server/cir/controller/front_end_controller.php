@@ -7,8 +7,6 @@ if ($_GET['option'] == 'home') {
 	header("Location: /index.php#visualization");
 } elseif ($_GET['option'] == 'home_help') {
 	header("Location: /index.php#help");
-} elseif ($_GET['option'] == 'help') {
-	header("Location: /cir/view/site/help.php");
 } elseif ($_GET['option'] == 'viz_timeline_trend') {
 	header("Location: /cir/view/site/viz_timeline_trend.php");
 } elseif ($_GET['option'] == 'viz_top_n_x_of_y') {
