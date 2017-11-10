@@ -38,7 +38,7 @@ form.addEventListener('submit', function(e) {
     var visType = form.elements["visType"].value;
 
     console.log(N);
-                console.log(X);
+    console.log(X);
     console.log(Y);
     console.log(value);
 
