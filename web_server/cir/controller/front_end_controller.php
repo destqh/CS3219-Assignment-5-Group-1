@@ -7,8 +7,6 @@ if ($_GET['option'] == 'home') {
 	header("Location: /index.php#visualization");
 } elseif ($_GET['option'] == 'home_help') {
 	header("Location: /index.php#help");
-} elseif ($_GET['option'] == 'upload') {
-	header("Location: /cir/view/site/upload.php");
 } elseif ($_GET['option'] == 'help') {
 	header("Location: /cir/view/site/help.php");
 } elseif ($_GET['option'] == 'viz_timeline_trend') {
@@ -19,6 +17,5 @@ if ($_GET['option'] == 'home') {
 	header("Location: /cir/view/site/viz_citation_network.php");
 } elseif ($_GET['option'] == 'upload_file_format') {
 	header("Location: /cir/view/site/upload_file_format.php");
-} else {
 }
 ?>
