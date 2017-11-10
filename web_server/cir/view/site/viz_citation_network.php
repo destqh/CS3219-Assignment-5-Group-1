@@ -22,17 +22,13 @@
     <form name="title" id="title" style="float:left">
     <div class="visType" margin="20">
         <p><select id="trendType" name="visType" class="w3-select" style="width:650px">
-                <option value="incitations">In Citations</option>
-                <option value="outcitations">Out Citations</option>
+            <option value="incitations">In Citations</option>
+            <option value="outcitations">Out Citations</option>
             </select>
         </p>
-
-    <p><input class="w3-input w3-border" type="text" id="myVal" placeholder="Enter title" required name="title"></p>
-
-        <p>
-          <button class="w3-button w3-black" type="submit" name="Submit" id="submit" value="Visualise">Visualize</button>
-        </p>
-        </div>
+	    <p><input class="w3-input w3-border" type="text" id="myVal" placeholder="Enter title" required name="title"></p>
+		<p><button class="w3-button w3-black" type="submit" name="Submit" id="submit" value="Visualise">Visualize</button></p>
+     </div>
         </form>
     </div>
   </div>
@@ -42,27 +38,22 @@
 <div id="viz" style="width:auto; height:auto;"></div>
 
 <script>
-  
     var form = document.getElementById('title');
-
     form.addEventListener('submit', function(e) {
-        e.preventDefault(); // don't submit
-        var title = document.getElementById("myVal").value;
-
-        var visType = form.elements["visType"].value;
-        console.log(visType);
-        console.log(title);
-            
-        if (title && visType) 
-            updateData(title, visType);
-        else
-            alert("Please fill in all inputs");
+    e.preventDefault(); // don't submit
+    var title = document.getElementById("myVal").value;
+    var visType = form.elements["visType"].value;
+    console.log(visType);
+    console.log(title);
+        
+    if (title && visType) 
+        updateData(title, visType);
+    else
+        alert("Please fill in all inputs");
     });
 
     function updateData(title, visType) {
         d3.select("#viz").selectAll('*').remove();
-
- // var title = "Low-density parity check codes over GF(q)";
         d3.json('http://localhost:3000/api/get-citation-network/' + title + '/' + visType, function(error, dataset) {
         if (error || dataset.length == 0) {
         	alert("No Result!");
@@ -78,25 +69,11 @@
 
         var colors = ["#C70039" ,  "#D0CA4C", "#3941A5  "];
         var colorMap = colors.slice(0,levelSize);
-
-    //                 var visualization = d3plus.viz()
-    // .container("#viz")  // container DIV to hold the visualization
-    // .type("network")    // visualization type
-    // .data(dataset.data)  // sample dataset to attach to nodes
-    // .edges(dataset.connections) // list of node connections
-    // .id("id")   
-    // .edges({"arrows": true}) 
-    // .size(4)
-    // .color("level")
-    // .legend({ "icons": false })
-   
-
         var visualization = d3plus.viz()
         .container("#viz")
         .type("rings")
         .data(dataset.data)
         .id("id")
-        // .size("value")
         .edges(dataset.connections)
         .focus(dataset.data[0].id)
         .color("level")
@@ -116,8 +93,5 @@
         window.scrollTo(0,document.body.scrollHeight);
         $('html,body').animate({scrollTop: document.body.scrollHeight},"fast");
    });
-}
-
-  // instantiate d3plus
-  
+} 
 </script>
