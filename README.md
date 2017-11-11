@@ -34,7 +34,7 @@ Since data is more easily understood when it is visually presented, patterns whi
 		* Under Manage Servers> Configure: Change port to 80.
 	3. Copy cir/web_server/cir folder to C:\Bitnami\wampstack-7.1.11-0 folder.
 	4. Copy cir/web_server/index.php file to C:\Bitnami\wampstack-7.1.11-0 folder.
-	5. Start Apache server in Bitnami Wamp Stack Manager tool under Manage Server.
+	5. Start Apache server in Bitnami Wamp Stack Manager tool under Manage Servers.
 	
 3. Set up Node.js
 	* Download and install [node.js](https://nodejs.org/en/) version 8.
