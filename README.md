@@ -29,8 +29,14 @@ Since data is more easily understood when it is visually presented, patterns whi
 		net stop mongodb
 		```
 2. Set up Bitnami Wamp Stack (Windows)
-	1. Download and install [bitnami-wampstack-7.1.11-0-windows for win 32-bits / bitnami-wampstack-7.1.11-0-windows-x64 for win 64-bits](https://bitnami.com/stack/wamp/installer).
-	2. You can install Bitnami Wamp Stack in any folder which can be change during the installation phase.
+	1. Download and install [bitnami-wampstack-7.1.11-0-windows for win 32-bits / bitnami-wampstack-7.1.11-0-windows-x64 for win 64-bits](https://bitnami.com/stack/wamp/installer) under C:\ drive.
+	2. Open Bitnami Wamp Stack Manager tool
+		i. Under Manage Servers
+			a. Click Configure
+				- Change port to 80.
+	3. Copy cir/web_server/cir folder to C:\Bitnami\wampstack-7.1.11-0 folder.
+	4. Copy cir/web_server/index.php file to C:\Bitnami\wampstack-7.1.11-0 folder.
+	5. Start Apache server in Bitnami Wamp Stack Manager tool under Manage Server.
 	
 3. Set up Node.js
 	* Download and install [node.js](https://nodejs.org/en/) version 8.
