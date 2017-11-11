@@ -59,11 +59,13 @@
 	<h3 class="w3-center">Upload the file containing conference information(json/xml)</h3>
 	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo "option=upload_file_format"; ?>" style="background:#000000; color:white;">Guide on file format</a>
 	<p></p>
-	<form action="../upload/upload_checker.php" method="post" enctype="multipart/form-data">
+	<form action="http://localhost:3000/upload" method="post" enctype="multipart/form-data" target="myIframe" id="formUpload">
 		<input id="inp1" type="file" name="fileToUpload" class="btnBrowseFile" value="Upload" id="fileToUpload"/>
 		<p></p>
-		<input id="inp2" type="submit" name="submit" class="w3-button w3-black" value="Upload" />
+		<input id="inp2" type="button" onclick="beforeSubmit();" class="w3-button w3-black" value="Upload" />
 	</form>
+	<iframe srce="" name="myIframe" id="myIframe" style="width:200px;height:50px;"> Iframe not supported by this browser</iframe>
+
 
 	<h3 class="w3-center">Latest uploaded data statistics</h3>
 	<div class="w3-quarter">
@@ -161,5 +163,22 @@ function w3_close() {
 }
 </script>
 
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+
+<script>
+
+beforeSubmit = function(){
+        if (1 == 1){
+			var html_string= "Uploading... please wait...";
+			document.getElementById('myIframe').src = "data:text/html;charset=utf-8," + escape(html_string);
+			setTimeout(function(){ 
+				$("#formUpload").submit();            
+			}, 1000);
+			
+
+	        }        
+    }
+
+</script>
 </body>
 </html>
