@@ -66,20 +66,6 @@
 	</form>
 	<iframe srce="" name="myIframe" id="myIframe" style="width:200px;height:50px;"> Iframe not supported by this browser</iframe>
 
-
-	<h3 class="w3-center">Latest uploaded data statistics</h3>
-	<div class="w3-quarter">
-		<span class="w3-xxlarge">14+</span>
-		<br>Latest Upload filename
-	</div>
-	<div class="w3-quarter">
-		<span class="w3-xxlarge">55+</span>
-		<br>Last Uploaded
-	</div>
-	<div class="w3-quarter">
-		<span class="w3-xxlarge">89+</span>
-		<br>Number of papers
-	</div>
 </div>
 
 <!-- Visalization Section -->
