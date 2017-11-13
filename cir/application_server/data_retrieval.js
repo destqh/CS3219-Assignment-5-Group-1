@@ -13,7 +13,6 @@ function data_retrieval()
 {
     const AUTHOR = "author";
     const AUTHOR_NAME = "authors.name";
-    const ERROR = "error";
     const VENUE = "venue";
     const CITING_PAPER = "citingPaper";
     const CITED_PAPER = "citedPaper";
@@ -36,7 +35,7 @@ function data_retrieval()
         for (var i = 0; i < inputValues.length; i++) {
             inputValues[i] = replacePlusSignWithSpace(inputValues[i].toLowerCase());
             var typeOfTrendObj = {};
-            var projectObj = { _ID: 0, "year": "$_id", "count": "$count" };
+            var projectObj = { "_id": 0, "year": "$_id", "count": "$count" };
             var matchType = typeOfTrend;
 
             if (typeOfTrend == AUTHOR) 
@@ -68,15 +67,16 @@ function data_retrieval()
         for (var i = 0; i < query.length; i++) {
             threadQueries[i] = db.getDocuments(query[i]);
         }
-
         async.parallel(threadQueries, function(err, results){
+            if(err) throw err;
             var finalResults = [];
             for(var i = 0; i < inputValues.length; i++) {
                 if (results[i].length == 0) {
-                    res.json({ ERROR: typeOfTrend + " " + "'" + inputValues[i] + "'" + " not found!"});
+                    res.json({ "error": typeOfTrend + " " + "'" + inputValues[i] + "'" + " not found!"});
                     return;
                 }
                 finalResults = combineTwoArrays(finalResults, results[i]);
+
             }
             res.json(finalResults);
         });   
@@ -89,10 +89,10 @@ function data_retrieval()
         var threadQueries = [];
         var validPapers = [];
 
-        for (key in titles) {
-            titles[key] = replacePlusSignWithSpace(titles[key].toLowerCase());
+        for (var i = 0; i < titles.length; i++) {
+            titles[i] = replacePlusSignWithSpace(titles[i].toLowerCase());
 
-            var inputQuery = { "title": titles[key] };
+            var inputQuery = { "title": titles[i] };
             var outputQuery = { "incitations": 1, "_id": 0, "id": 1};
 
             threadQueries.push(db.getDocument(inputQuery, outputQuery));
@@ -100,6 +100,16 @@ function data_retrieval()
 
         async.series(threadQueries, function(err, results) {
             if (err) throw err;
+            for(var i = 0; i < results.length; i++) {
+                if (results[i] == null) {
+                    res.json({ "error": "title " + "'" + titles[i] + "'" + " not found!"});
+                    return;
+                }
+                if (results[i].length == 0) {
+                    res.json({ "error": "title " + "'" + titles[i] + "'" + " not found!"});
+                    return;
+                }
+            }
 
             var inCitationsCountArray = [];
             var threadQueries = [];
@@ -159,19 +169,22 @@ function data_retrieval()
                     var mapYear = {};
                     var arrYear = data[indexTitle];
 
-                    for (index in arrYear) {
+                    for (var index = 0; index < arrYear.length; index++) {
                         mapYear[arrYear[index]] = 0;
                     }
 
-                    for (index in arrYear) {
+                    for (var index = 0; index < arrYear.length; index++) {
                         if(mapYear[arrYear[index]] != undefined) {
                             mapYear[arrYear[index]] =  mapYear[arrYear[index]] + 1;
                         }
                     }
 
                     var title = titles[indexTitle];
-                    for(key in mapYear)
-                        json.push({title:title, year:key, count:mapYear[key]});
+                    for(key in mapYear) {
+                        var year = parseInt(key);
+                        if (year)
+                            json.push({title:title, year:key, count:mapYear[key]});
+                    }
 
                 }
                 res.json(json);
@@ -333,10 +346,12 @@ function data_retrieval()
 
                                 secondCount ++;
                                 var notExist = true;
-                                if (visType == "incitations")
-                                    inGraph.push({"source": thirdLevel.title, "target": targetId});
-                                else 
-                                    inGraph.push({"source": targetId, "target": thirdLevel.title});
+                                if (targetId != null) {
+                                    if (visType == "incitations")
+                                        inGraph.push({"source": thirdLevel.title, "target": targetId});
+                                    else 
+                                        inGraph.push({"source": targetId, "target": thirdLevel.title});
+                                }
                                 for(index in data) {
                                     if (data[index].id == thirdLevel.title) {
                                         notExist = false;
@@ -360,6 +375,21 @@ function data_retrieval()
         });
     }
 
+    this.getAllAuthors = (req,res) => {
+        var groupQuery = { $group: { _id: "$authors.name", count: { $sum: 1 } } };
+            var projectQuery = { $project: { _id: 0, "value": "$_id"} };
+            var unwindQuery = { "$unwind": "$authors" };
+            query = [unwindQuery,groupQuery, projectQuery];
+
+        var arrTask = [db.getDocuments(query)];
+        async.series(arrTask, function(err, results)
+                        {
+                            if(err) throw err;
+                            res.json(results[0]);
+                        });
+
+    }
+
     this.postUpload = (req,res) => {
 
         if (req.files.fileToUpload) {
@@ -379,8 +409,8 @@ function data_retrieval()
                         {
                             if(err) throw err;
                             console.log("Successfully imported " + collectionName + '.xml !');
-                            db.close(); 
-                            res.send('Uploaded ' + fileName + '.xml' + ' successfully!');
+                            // db.close(); 
+                            res.send("<center>" + 'Uploaded ' + fileName  + ' successfully! <a target=\"_parent\" href=\"http://localhost:8080/index.php#visualization\">Click here to choose visualization</a>' + "</center>");
                         });
                     });
                 });
@@ -393,7 +423,7 @@ function data_retrieval()
                 file.mv(uploadpath,function(err){
                     if (err) {
                         console.log("File Upload Failed!",fileName,err);
-                        res.send("File Upload Failed. Please Try Again.");
+                        res.send("<center>" + "File Upload Failed. Please Try Again." + "</center>");
                     }
                     else {
                         console.log("File Uploaded!",fileName);
@@ -404,14 +434,14 @@ function data_retrieval()
             }
 
             if (fileType != TYPE_JSON && fileType != TYPE_XML) {
-                res.send("Your file is not in json/xml format. Please use json/xml format.")
+                res.send("<center>" + "Your file is not in json/xml format. Please use json/xml format." + "</center>")
                 res.end();
             }
         
         }
 
         else {
-            res.send("No File selected. Please choose a file to upload.");
+            res.send("<center>" + "No File selected. Please choose a file to upload." + "</center>");
             res.end();
         };
 
@@ -426,7 +456,7 @@ function data_retrieval()
             if (datum.authors) {
                 normalizeDatum['authors'] = [];
                 for (var j = 0; j < datum.authors.length; j++) {
-                    normalizeDatum['authors'].push({ ids: datum.authors[j].ids.toLowerCase(), name: datum.authors[j].name[0].toLowerCase() });
+                    normalizeDatum['authors'].push({ ids: arrayToLowerCase(datum.authors[j].ids), name: datum.authors[j].name[0].toLowerCase() });
                 }
             }
 
@@ -496,18 +526,38 @@ function data_retrieval()
         }).on('close', function() {
             console.log("Finish writing to array.");
 
-            var arrTask = [db.deleteDocument(collectionName), db.insertDocument(arrayLines, collectionName)];
+            var arrTask = [db.deleteDocument(collectionName), db.insertDocument(arrayLines, collectionName), db.createIndex(collectionName)];
             async.series(arrTask, function(err, results)
             {
                 if(err) throw err;
                 console.log("Successfully imported " + collectionName + '.json !');
-                db.close(); 
-                res.send('Uploaded ' + fileName + '.json' + ' successfully!');
-                fs.unlinkSync(fileName);            
-            });
+
+                var groupQuery = { $group: { _id: "$authors.name", count: { $sum: 1 } } };
+                var projectQuery = { $project: { _id: 0, "value": "$_id"} };
+                var unwindQuery = { "$unwind": "$authors" };
+                query = [unwindQuery,groupQuery, projectQuery];
+
+                var arrTask = [db.getDocuments(query)];
+                async.series(arrTask, function(err, results)    {
+                    if(err) throw err;
+                    var content = results[0];
+
+                    var file = fs.createWriteStream('allAuthors.json');
+                    file.on('error', function(err) { /* error handling */ });
+                    content.forEach(function(v) { 
+                        if(v.value.indexOf("�") == -1)
+                            file.write(JSON.stringify(v, 'utf8')+ ',' + '\n'); 
+                    });
+                    file.end();
+                    
+                    console.log("The file was saved!");
+                    res.send('<center>' + 'Uploaded ' + fileName  + ' successfully! <a target=\"_parent\" href=\"http://localhost:8080/index.php#visualization\">Click here to choose visualization</a>' + '</center>');
+                    fs.unlinkSync(fileName); 
+              
+                });
                         
-            
-                
+            });
+                                              
         });
 
     }
@@ -520,9 +570,17 @@ function data_retrieval()
         return pipeline;
     }
     function combineTwoArrays(array1, array2) {
+        if (array1 == null)
+            return array2;
+        if (array2 == null)
+            return array1;
+
+        if (array1.length == 0) 
+            return array2;
+
         var result = array1;
-        for(var index in array2) {
-            result.push(array2[index]);
+        for(var i = 0; i < array2.length; i++) {
+            result.push(array2[i]);
         }
         return result;
     }
