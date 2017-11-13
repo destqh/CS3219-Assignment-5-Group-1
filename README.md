@@ -28,8 +28,15 @@ Since data is more easily understood when it is visually presented, patterns whi
 		```
 		net stop mongodb
 		```
+2. Set up Bitnami Wamp Stack (Windows)
+	1. Download and install [bitnami-wampstack-7.1.11-0-windows for win 32-bits / bitnami-wampstack-7.1.11-0-windows-x64 for win 64-bits](https://bitnami.com/stack/wamp/installer) under C:\ drive.
+	2. Open Bitnami Wamp Stack Manager tool
+		* Under Manage Servers> Configure: Change port to 80.
+	3. Copy cir/web_server/cir folder to C:\Bitnami\wampstack-7.1.11-0 folder.
+	4. Copy cir/web_server/index.php file to C:\Bitnami\wampstack-7.1.11-0 folder.
+	5. Start Apache server in Bitnami Wamp Stack Manager tool under Manage Servers.
 	
-2. Set up Node.js
+3. Set up Node.js
 	* Download and install [node.js](https://nodejs.org/en/) version 8.
 	* View version of node.js and npm:
 		```
@@ -37,23 +44,23 @@ Since data is more easily understood when it is visually presented, patterns whi
 		npm -v
 		```
 
-3. Clone Repo and in Repo folder run cmd line:
+4. Clone Repo and in Repo folder run cmd line:
 	```
 	npm install express body-parser mongojs --save
 	npm install chai chai-http mocha --save-dev
 	```
 
-4. Populate data to MongoDB
+5. Populate data to MongoDB
 	1. Make sure to start MongoDB.
 	2. In the Repo folder 'dbdata', change 'main.sh' to 'main.bat' (For Windows User).
 	3. Run main.bat.
 
-5. Run Program using cmd in the Repo folder (Ctrl+C to stop):
+6. Run Program using cmd in the Repo folder (Ctrl+C to stop):
 	```
 	npm start
 	```
 	
-6. Run Test using cmd in the Repo folder:
+7. Run Test using cmd in the Repo folder:
 	```
 	npm test
 	```
