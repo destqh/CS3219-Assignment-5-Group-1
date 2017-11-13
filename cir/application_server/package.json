@@ -1,0 +1,33 @@
+{
+  "name": "CIR",
+  "version": "1.0.0",
+  "description": "REST API application server",
+  "main": "app_server.js",
+  "scripts": {
+    "test": "mocha --exit",
+    "start": "node app_server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.5.0",
+    "body-parser": "^1.18.2",
+    "bootstrap": "^4.0.0-beta",
+    "express": "^4.16.2",
+    "express-fileupload": "^0.3.0",
+    "fast-csv": "^2.4.1",
+    "jquery": "^3.0.0",
+    "js2xmlparser": "^3.0.0",
+    "jsontoxml": "^0.1.0",
+    "mongojs": "^2.4.1",
+    "pipeline-js": "^1.0.2",
+    "popper.js": "^1.11.0",
+    "xml-parse": "^0.3.1",
+    "xml2js": "^0.4.19"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "mocha": "^4.0.1"
+  }
+}
