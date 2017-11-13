@@ -41,4 +41,10 @@ function data_access(collection)
 			db.collection(collectionName).remove({}, callback);
 		}
 	}; 
+
+	this.createIndex = (collectionName) => {
+		return function(callback) {
+			db.collection(collectionName).createIndex({"id" : 1}, callback);
+		}
+	}
 }
