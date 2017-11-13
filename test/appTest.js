@@ -11,31 +11,26 @@ describe('App', function() {
 	
 	it('Test Compare Trend - author', (done) => {
 	chai.request(app)
-		.get('/api/get-publications-trend/author/{"values":["wei wang", "yan li"]}')
+		.get('/api/get-publications-trend-citation/{"values":["Caregiver status affects medication adherence among older home care clients with heart failure."]}')
 		.end((err, res) => {
 			res.should.have.status(200);
 			res.body.should.be.a('array');
-			res.body.length.should.be.eql(6);
+			res.body.length.should.be.eql(2);
 			
-			res.body.should.be.eql([{"year":2004,"count":1,"author":"wei wang"},
-			{"year":2011,"count":1,"author":"wei wang"},
-			{"year":2013,"count":1,"author":"wei wang"},
-			{"year":2014,"count":1,"author":"wei wang"},
-			{"year":2015,"count":2,"author":"wei wang"},
-			{"year":2014,"count":2,"author":"yan li"}]);
+			res.body.should.be.eql([{"title":"caregiver status affects medication adherence among older home care clients with heart failure.","year":"2007","count":1},{"title":"caregiver status affects medication adherence among older home care clients with heart failure.","year":"2008","count":2}]);
 			done();
 		});
 	});
 	
 	it('Test Trend - venue', (done) => {
 	chai.request(app)
-		.get('/api/get-publications-trend/venue/{"values":["arxiv"]}')
+		.get('/api/get-top-N-X-Y/5/author/venue/arxiv')
 		.end((err, res) => {
 			res.should.have.status(200);
 			res.body.should.be.a('array');
-			res.body.length.should.be.eql(12);
+			res.body.length.should.be.eql(5);
 			
-			res.body.should.be.eql([{"year":1997,"count":1,"venue":"arxiv"},{"year":2005,"count":1,"venue":"arxiv"},{"year":2006,"count":1,"venue":"arxiv"},{"year":2008,"count":5,"venue":"arxiv"},{"year":2009,"count":1,"venue":"arxiv"},{"year":2010,"count":2,"venue":"arxiv"},{"year":2011,"count":2,"venue":"arxiv"},{"year":2012,"count":4,"venue":"arxiv"},{"year":2013,"count":2,"venue":"arxiv"},{"year":2014,"count":3,"venue":"arxiv"},{"year":2015,"count":7,"venue":"arxiv"},{"year":2016,"count":5,"venue":"arxiv"}]);
+			res.body.should.be.eql([{"author":"francisco marcos de assis","count":1,"year":[2016]},{"author":"radford m. neal","count":1,"year":[2015]},{"author":"yann lecun","count":1,"year":[2011]},{"author":"karol gregor","count":1,"year":[2011]},{"author":"rebecca f. bruce","count":1,"year":[1997]}]);
 			done();
 		});
 	});
