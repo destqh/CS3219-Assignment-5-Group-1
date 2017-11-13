@@ -375,21 +375,6 @@ function data_retrieval()
         });
     }
 
-    this.getAllAuthors = (req,res) => {
-        var groupQuery = { $group: { _id: "$authors.name", count: { $sum: 1 } } };
-            var projectQuery = { $project: { _id: 0, "value": "$_id"} };
-            var unwindQuery = { "$unwind": "$authors" };
-            query = [unwindQuery,groupQuery, projectQuery];
-
-        var arrTask = [db.getDocuments(query)];
-        async.series(arrTask, function(err, results)
-                        {
-                            if(err) throw err;
-                            res.json(results[0]);
-                        });
-
-    }
-
     this.postUpload = (req,res) => {
 
         if (req.files.fileToUpload) {
@@ -531,33 +516,12 @@ function data_retrieval()
             {
                 if(err) throw err;
                 console.log("Successfully imported " + collectionName + '.json !');
+                res.send('<center>' + 'Uploaded ' + fileName  + ' successfully! <a target=\"_parent\" href=\"http://localhost:8080/index.php#visualization\">Click here to choose visualization</a>' + '</center>');
+                fs.unlinkSync(fileName);  
 
-                var groupQuery = { $group: { _id: "$authors.name", count: { $sum: 1 } } };
-                var projectQuery = { $project: { _id: 0, "value": "$_id"} };
-                var unwindQuery = { "$unwind": "$authors" };
-                query = [unwindQuery,groupQuery, projectQuery];
-
-                var arrTask = [db.getDocuments(query)];
-                async.series(arrTask, function(err, results)    {
-                    if(err) throw err;
-                    var content = results[0];
-
-                    var file = fs.createWriteStream('allAuthors.json');
-                    file.on('error', function(err) { /* error handling */ });
-                    content.forEach(function(v) { 
-                        if(v.value.indexOf("�") == -1)
-                            file.write(JSON.stringify(v, 'utf8')+ ',' + '\n'); 
-                    });
-                    file.end();
-                    
-                    console.log("The file was saved!");
-                    res.send('<center>' + 'Uploaded ' + fileName  + ' successfully! <a target=\"_parent\" href=\"http://localhost:8080/index.php#visualization\">Click here to choose visualization</a>' + '</center>');
-                    fs.unlinkSync(fileName); 
-              
-                });
                         
-            });
-                                              
+            });        
+                
         });
 
     }
