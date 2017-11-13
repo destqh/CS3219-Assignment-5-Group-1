@@ -5,6 +5,7 @@ before_script:
   
 script:
   - ./dbdata/main.sh
+  - cd ./cir/application_server
   - npm test
   
 services: 
