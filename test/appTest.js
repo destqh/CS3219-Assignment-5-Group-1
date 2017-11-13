@@ -11,7 +11,7 @@ describe('App', function() {
 	
 	it('Test Compare Trend - author', (done) => {
 	chai.request(app)
-		.get('/api/get-publications-trend/author/{"values":["$wei wang", "$yan li"]}')
+		.get('/api/get-publications-trend/author/{"values":["wei wang", "yan li"]}')
 		.end((err, res) => {
 			res.should.have.status(200);
 			res.body.should.be.a('array');
@@ -29,7 +29,7 @@ describe('App', function() {
 	
 	it('Test Trend - venue', (done) => {
 	chai.request(app)
-		.get('/api/get-publications-trend/venue/{"values":["$arxiv"]}')
+		.get('/api/get-publications-trend/venue/{"values":["arxiv"]}')
 		.end((err, res) => {
 			res.should.have.status(200);
 			res.body.should.be.a('array');

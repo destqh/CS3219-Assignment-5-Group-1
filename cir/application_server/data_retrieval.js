@@ -264,7 +264,7 @@ function data_retrieval()
             if (err) throw err;
 
             var datum = resultDatum[0];
-            console.log(datum);
+            //console.log(datum);
         
             if (!datum) {
                 res.json(inGraph);
