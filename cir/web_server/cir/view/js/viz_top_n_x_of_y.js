@@ -3,31 +3,31 @@ activities.addEventListener("change", function() {
     $('#myVal').attr('placeholder', 'Enter ' + $("#Y option:selected").text() + ' here');
 });
 
-<!-- dynamic input fields by reading the json file -->
 $.getJSON("../json/topNXY.json", function(json) {
-var X = json.X;
-var Y = json.Y
-var select, option;
+    var X = json.X;
+    var Y = json.Y
+    var select, option;
 
-select = document.getElementById('X');
-for (var index in X.values) {
-    option = document.createElement('option');
-    option.value = X.values[index];
-    option.text = X.text[index];
-    select.add(option);
-}
+    select = document.getElementById('X');
+    for (var index in X.values) {
+        option = document.createElement('option');
+        option.value = X.values[index];
+        option.text = X.text[index];
+        select.add(option);
+    }
 
-select = document.getElementById('Y');
-for (var index in Y.values) {
-    option = document.createElement('option');
-    option.value = Y.values[index];
-    option.text = Y.text[index];
-    select.add(option);
-}
+    select = document.getElementById('Y');
+    for (var index in Y.values) {
+        option = document.createElement('option');
+        option.value = Y.values[index];
+        option.text = Y.text[index];
+        select.add(option);
+    }
 
-$('#myVal').attr('placeholder', 'Enter ' + $("#Y option:selected").text() + ' here');
+    $('#myVal').attr('placeholder', 'Enter ' + $("#Y option:selected").text() + ' here');
+
 });
-
+    
 var form = document.getElementById('form');
 form.addEventListener('submit', function(e) {
     e.preventDefault(); 
@@ -38,11 +38,11 @@ form.addEventListener('submit', function(e) {
     var visType = form.elements["visType"].value;
 
     console.log(N);
-    console.log(X);
+                console.log(X);
     console.log(Y);
     console.log(value);
 
-    if (Y && visType) {
+    if (N && Y && visType) {
         visData(value, N, X, Y, visType);
     }
     else 
@@ -51,15 +51,17 @@ form.addEventListener('submit', function(e) {
 });
 
 function visData(value, N, X, Y, visType) {
+
     d3.select("#viz").selectAll('*').remove();
+
     d3.json('http://localhost:3000/api/get-top-N-X-Y/' + N + '/' + X + '/' + Y + '/' + value, function(error, data) {
         if (error || data.length == 0) {
             document.getElementById("d3Title").innerHTML = insertTab() + "No Result Found";
             return;
         }
-
         console.log(data);    
         document.getElementById("d3Title").innerHTML = insertTab() + "Top " + N + " " + X +  "s for " + "'" + value + "'";
+        
         if (X == "venue" || X == "author") {
             var timeData = [];
             for(index in data) {
@@ -73,7 +75,8 @@ function visData(value, N, X, Y, visType) {
                 }
             }
             console.log(timeData);
-            data = timeData;
+            
+                data = timeData;
         }
         if (visType == "treeMap") {
             var visualization = d3plus.viz()
@@ -125,16 +128,21 @@ function visData(value, N, X, Y, visType) {
                ticks: arr
              })
              .order({"value": "count", "sort":"asc"})
+
+             // .y("count")
              .color(X)
              .height(20 * data.length + 100)
+
              .draw()
         }
-
         window.scrollTo(0,document.body.scrollHeight);
         $('html,body').animate({scrollTop: document.body.scrollHeight},"fast");
+
     });
+
 }
 
 function insertTab() {
     return "&nbsp;&nbsp;&nbsp;&nbsp;";
 }
+
