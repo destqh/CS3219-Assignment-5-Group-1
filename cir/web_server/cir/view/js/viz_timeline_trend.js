@@ -48,37 +48,37 @@ $(document).ready(function() {
 
     });
     $('#submit').click(function() {
-        var venueMap = $('#add_name').serialize();
+        var valueMap = $('#add_name').serialize();
         var trendType = document.getElementById("trendType").value;
         if (trendType == "title") {
-            updateDataTitle(URLToArray(venueMap));
+            updateDataTitle(URLToArray(valueMap));
         }
         else
-            updateData(URLToArray(venueMap), trendType);
+            updateData(URLToArray(valueMap), trendType);
     });
 });
 
-function updateDataTitle(venueMap) {
+function updateDataTitle(valueMap) {
      d3.select("#viz").selectAll('*').remove();
 
             var isEmpty = false;
-            for (index in venueMap) {
-                if (venueMap[index] == "")
+            for (index in valueMap) {
+                if (valueMap[index] == "")
                     isEmpty = true;
             }
             if (isEmpty) {
-                alert("Venue field/s cannot be empty!");
+                alert("Please input all fields!");
                 return;
             }
-            var venuesList = new Array();
-            for (key in venueMap) {
-                venuesList.push(venueMap[key]);
+            var valuesList = new Array();
+            for (key in valueMap) {
+                valuesList.push(valueMap[key]);
             }
 
-            venuesSet = Array.from(new Set(venuesList));
+            valuesSet = Array.from(new Set(valuesList));
 
-            if (venuesSet.length != venuesList.length) {
-                var r = confirm("There seem to be duplicate entries for more than one venue. Are you sure you want to continue?");
+            if (valuesSet.length != valuesList.length) {
+                var r = confirm("There seem to be duplicate entries for more than one field. Are you sure you want to continue?");
                 if (r == false) {
                     return false;
 
@@ -87,11 +87,11 @@ function updateDataTitle(venueMap) {
             
             
 
-            var venueJSON = {
-                values: venuesSet
+            var valueJSON = {
+                values: valuesSet
             };
 
-    d3.json('http://localhost:3000/api/get-publications-trend-citation/' + JSON.stringify(venueJSON), function(error, dataset) {
+    d3.json('http://localhost:3000/api/get-publications-trend-citation/' + JSON.stringify(valueJSON), function(error, dataset) {
     console.log(dataset);
         d3.select("#viz").selectAll('*').remove();
         if (error)  throw error;
@@ -100,31 +100,31 @@ function updateDataTitle(venueMap) {
             return;
         }
 
-        visData(dataset, "title", venuesSet, venueMap);
+        visData(dataset, "title", valuesSet, valueMap);
     });
 }
 
-function updateData(venueMap, trendType) {
+function updateData(valueMap, trendType) {
     d3.select("#viz").selectAll('*').remove();
 
     var isEmpty = false;
-    for (index in venueMap) {
-        if (venueMap[index] == "")
+    for (index in valueMap) {
+        if (valueMap[index] == "")
             isEmpty = true;
     }
     if (isEmpty) {
-        alert("Venue field/s cannot be empty!");
+        alert("Please input all fields!");
         return;
     }
-    var venuesList = new Array();
-    for (key in venueMap) {
-        venuesList.push(venueMap[key]);
+    var valuesList = new Array();
+    for (key in valueMap) {
+        valuesList.push(valueMap[key]);
     }
 
-    venuesSet = Array.from(new Set(venuesList));
+    valuesSet = Array.from(new Set(valuesList));
 
-    if (venuesSet.length != venuesList.length) {
-        var r = confirm("There seem to be duplicate entries for more than one venue. Are you sure you want to continue?");
+    if (valuesSet.length != valuesList.length) {
+        var r = confirm("There seem to be duplicate entries for more than one field. Are you sure you want to continue?");
         if (r == false) {
             return false;
 
@@ -133,23 +133,23 @@ function updateData(venueMap, trendType) {
     
     
 
-    var venueJSON = {
-        values: venuesSet
+    var valueJSON = {
+        values: valuesSet
     };
 
-    d3.json('http://localhost:3000/api/get-publications-trend/' + trendType + '/' + JSON.stringify(venueJSON), function(error, dataset) {
+    d3.json('http://localhost:3000/api/get-publications-trend/' + trendType + '/' + JSON.stringify(valueJSON), function(error, dataset) {
         if (error) throw error;
         if (dataset.error) {
             alert(dataset.error);
             return;
         }
 
-        visData(dataset, trendType, venuesSet, venueMap);
+        visData(dataset, trendType, valuesSet, valueMap);
     });
 
 }
 
-function visData(dataset, trendType, venuesSet, venueMap) {
+function visData(dataset, trendType, valuesSet, valueMap) {
 
     var map = new Object();
     var min = Infinity,
@@ -182,7 +182,7 @@ function visData(dataset, trendType, venuesSet, venueMap) {
 
 
     for (var i = min; i <= max; i++) {
-        if (venuesSet.length == 1) {
+        if (valuesSet.length == 1) {
 
             if(map[i].length == 0) {
                 var obj = {};
